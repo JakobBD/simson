@@ -1,8 +1,6 @@
 from sodym.classes.mfa_system import MFASystem
 from sodym.classes.stocks_in_mfa import StockWithDSM
 from src.model_extensions.extrapolate_stock import extrapolate_stock
-from src.model_extensions.custom_visualization import visualize_stock
-from sodym.tools.config import cfg
 
 
 class InflowDrivenHistoric_StockDrivenFuture(MFASystem):
@@ -31,7 +29,7 @@ class InflowDrivenHistoric_StockDrivenFuture(MFASystem):
         hist_stk = self.get_new_stock(with_dsm=True, dim_letters=('h','r','g'))
 
         hist_stk.inflow[...] = prm['production']
-        hist_stk.set_lifetime(cfg.ldf_type, prm['lifetime_mean'], prm['lifetime_std'])
+        hist_stk.set_lifetime(self.ldf_type, prm['lifetime_mean'], prm['lifetime_std'])
 
         hist_stk.compute_inflow_driven()
 
@@ -56,14 +54,17 @@ class InflowDrivenHistoric_StockDrivenFuture(MFASystem):
         historic_gdppc[...] = self.parameters['gdppc'] * transform_t_thist
         historic_stocks_pc[...] = historic_stocks / historic_pop
 
-        extrapolate_stock(historic_stocks_pc.values,
-                          self.parameters['gdppc'].values,
-                          stocks_pc.values)
+        extrapolate_stock(
+            curve_strategy=self.curve_strategy,
+            historic_stocks=historic_stocks_pc.values,
+            gdppc=self.parameters['gdppc'].values,
+            prediction_out=stocks_pc.values
+        )
 
         # transform back to total stocks
         stocks[...] = stocks_pc * pop
 
-        visualize_stock(self, self.parameters['gdppc'], historic_gdppc, stocks, historic_stocks, stocks_pc, historic_stocks_pc)
+        #visualize_stock(self, self.parameters['gdppc'], historic_gdppc, stocks, historic_stocks, stocks_pc, historic_stocks_pc)
 
         return stocks
 
@@ -72,7 +73,7 @@ class InflowDrivenHistoric_StockDrivenFuture(MFASystem):
         stk = self.get_new_stock(with_dsm=True, dim_letters=('t','r','g'))
 
         stk.stock[...] = stock
-        stk.set_lifetime(cfg.ldf_type, prm['lifetime_mean'], prm['lifetime_std'])
+        stk.set_lifetime(self.ldf_type, prm['lifetime_mean'], prm['lifetime_std'])
 
         stk.compute_stock_driven()
 
@@ -82,7 +83,7 @@ class InflowDrivenHistoric_StockDrivenFuture(MFASystem):
         # We use an auxiliary stock for the prediction step to save dimensions and computation time
         # Therefore, we have to transfer the result to the higher-dimensional stock in the MFA system
         prm = self.parameters
-        self.stocks['in_use'].stock[...]   = stk.stock   * prm['material_shares_in_goods'] * prm['carbon_content_materials']
-        self.stocks['in_use'].inflow[...]  = stk.inflow  * prm['material_shares_in_goods'] * prm['carbon_content_materials']
+        self.stocks['in_use'].stock[...]   = stk.stock * prm['material_shares_in_goods'] * prm['carbon_content_materials']
+        self.stocks['in_use'].inflow[...]  = stk.inflow * prm['material_shares_in_goods'] * prm['carbon_content_materials']
         self.stocks['in_use'].outflow[...] = stk.outflow * prm['material_shares_in_goods'] * prm['carbon_content_materials']
         return

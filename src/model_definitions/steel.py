@@ -1,24 +1,20 @@
-from sodym.tools.config import cfg
 from sodym.classes.mfa_definition import (
     MFADefinition, DimensionDefinition, FlowDefinition, ParameterDefinition, StockDefinition
 )
 from src.model_extensions.use_stock_getter import InflowDrivenHistoric_StockDrivenFuture
 
 
-# from sodym.tools.visualize import visualize_stock_prediction
-
-
 class SteelMFASystem(InflowDrivenHistoric_StockDrivenFuture):
 
     def set_up_definition(self):
         dimensions = [
-            DimensionDefinition(name='Time', dim_letter='t', dtype=int, filename='time_in_years'),
-            DimensionDefinition(name='Element', dim_letter='e', dtype=str, filename='elements'),
-            DimensionDefinition(name='Region', dim_letter='r', dtype=str, filename='regions'),
-            DimensionDefinition(name='Intermediate', dim_letter='i', dtype=str, filename='intermediate_products'),
-            DimensionDefinition(name='Good', dim_letter='g', dtype=str, filename='goods_in_use'),
-            DimensionDefinition(name='Scenario', dim_letter='s', dtype=str, filename='scenarios'),
-            DimensionDefinition(name='Historic Time', dim_letter='h', dtype=int, filename='historic_years'),
+            DimensionDefinition(name='Time', dim_letter='t', dtype=int),
+            DimensionDefinition(name='Element', dim_letter='e', dtype=str),
+            DimensionDefinition(name='Region', dim_letter='r', dtype=str),
+            DimensionDefinition(name='Intermediate', dim_letter='i', dtype=str),
+            DimensionDefinition(name='Good', dim_letter='g', dtype=str),
+            DimensionDefinition(name='Scenario', dim_letter='s', dtype=str),
+            DimensionDefinition(name='Historic Time', dim_letter='h', dtype=int),
         ]
 
         processes = [
@@ -150,7 +146,6 @@ class SteelMFASystem(InflowDrivenHistoric_StockDrivenFuture):
             'production': self.get_new_array(dim_letters=('t', 'e', 'r', 'i', 's')),
             'forming_outflow': self.get_new_array(dim_letters=('t', 'e', 'r', 's')),
             'scrap_in_production': self.get_new_array(dim_letters=('t', 'e', 'r', 's')),
-            'production_inflow': self.get_new_array(dim_letters=('t','e','r','s')),
             'available_scrap': self.get_new_array(dim_letters=('t', 'e', 'r', 's')),
             'eaf_share_production': self.get_new_array(dim_letters=('t', 'e', 'r', 's')),
             'production_inflow': self.get_new_array(dim_letters=('t', 'e', 'r', 's')),

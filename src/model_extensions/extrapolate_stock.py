@@ -1,18 +1,16 @@
 import numpy as np
 import scipy.optimize
-from sodym.tools.config import cfg
 
-def extrapolate_stock(historic_stocks, gdppc, prediction_out):
+def extrapolate_stock(curve_strategy, historic_stocks, gdppc, prediction_out):
     """
     wrapper to choose extrapolation strategy from config
     """
-    strategy=cfg.curve_strategy
-    if strategy == "GDP_regression":
+    if curve_strategy == "GDP_regression":
         gdp_regression(historic_stocks,
                        gdppc,
                        prediction_out)
     else:
-        raise RuntimeError(f"Prediction strategy {strategy} is not defined. "
+        raise RuntimeError(f"Prediction strategy {curve_strategy} is not defined. "
                         f"It needs to be 'GDP_regression'.")
     return
 

@@ -6,27 +6,30 @@ verbose: False
 
 # data sources
 input_data_path: 'data/plastics/input'
-output_path: 'data/plastics/output'
 
 # model customization
-curve_strategy: 'GDP_regression'
-ldf_type: 'Normal'
-product_dimension_name: 'Material'
-has_scenarios: False
+model_customization:
+  curve_strategy: 'GDP_regression'
+  ldf_type: 'Normal'
+  product_dimension_name: 'Material'
+  has_scenarios: False
 
-visualize:
-  stock:
-    do_visualize: True
-    # options: 'time', 'gdppc'
-    over: 'gdppc'
-    per_capita: False
-  production:
-    do_visualize: True
-  sankey:
-    do_visualize: True
+# visualization
+stock:
+  do_visualize: True
+  # options: 'time', 'gdppc'
+  over: 'gdppc'
+  per_capita: False
+production:
+  do_visualize: True
+sankey:
+  do_visualize: True
+  color_scheme: 'blueish'
 do_show_figs: True
 do_save_figs: False
 
+# data export
+output_path: 'data/plastics/output'
 do_export:
   pickle: False
   csv: True

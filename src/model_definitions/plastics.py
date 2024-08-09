@@ -9,12 +9,12 @@ class PlasticsMFASystem(InflowDrivenHistoric_StockDrivenFuture):
     def set_up_definition(self):
 
         dimensions = [
-            DimensionDefinition(name='Time',          dim_letter='t', dtype=int, filename='years'),
-            DimensionDefinition(name='Historic Time', dim_letter='h', dtype=int, filename='historic_years'),
-            DimensionDefinition(name='Element',       dim_letter='e', dtype=str, filename='elements'),
-            DimensionDefinition(name='Region',        dim_letter='r', dtype=str, filename='regions'),
-            DimensionDefinition(name='Material',      dim_letter='m', dtype=str, filename='materials'),
-            DimensionDefinition(name='Good',          dim_letter='g', dtype=str, filename='in_use_categories'),
+            DimensionDefinition(name='Time',          dim_letter='t', dtype=int),
+            DimensionDefinition(name='Historic Time', dim_letter='h', dtype=int),
+            DimensionDefinition(name='Element',       dim_letter='e', dtype=str),
+            DimensionDefinition(name='Region',        dim_letter='r', dtype=str),
+            DimensionDefinition(name='Material',      dim_letter='m', dtype=str),
+            DimensionDefinition(name='Good',          dim_letter='g', dtype=str),
         ]
 
         processes = [
