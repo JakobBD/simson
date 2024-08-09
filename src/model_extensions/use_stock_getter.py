@@ -45,12 +45,13 @@ class InflowDrivenHistoric_StockDrivenFuture(MFASystem):
 
         # transform to per capita
         pop = self.parameters['population']
-        transform_t_thist  = self.get_subset_transformer(('t', 'h'))
-        historic_pop       = self.get_new_array(dim_letters=('h','r'))
-        historic_gdppc     = self.get_new_array(dim_letters=('h','r'))
-        historic_stocks_pc = self.get_new_array(dim_letters=('h','r','g'))
-        stocks_pc          = self.get_new_array(dim_letters=('t','r','g'))
-        stocks             = self.get_new_array(dim_letters=('t','r','g'))
+        pop_dim_letters = pop.dims.letters
+        transform_t_thist = self.get_subset_transformer(('t', 'h'))
+        historic_pop = self.get_new_array(dim_letters=('h',) + pop_dim_letters[1:])
+        historic_gdppc = self.get_new_array(dim_letters=('h',) + pop_dim_letters[1:])
+        historic_stocks_pc = self.get_new_array(dim_letters=('h', 'r', 'g'))
+        stocks_pc = self.get_new_array(dim_letters=pop_dim_letters + ('g',))
+        stocks = self.get_new_array(dim_letters=pop_dim_letters + ('g',))
 
         historic_pop[...] = pop * transform_t_thist
         historic_gdppc[...] = self.parameters['gdppc'] * transform_t_thist
@@ -63,13 +64,15 @@ class InflowDrivenHistoric_StockDrivenFuture(MFASystem):
         # transform back to total stocks
         stocks[...] = stocks_pc * pop
 
-        visualize_stock(self, self.parameters['gdppc'], historic_gdppc, stocks, historic_stocks, stocks_pc, historic_stocks_pc)
+        visualize_stock(self, self.parameters['gdppc'], historic_gdppc, stocks, historic_stocks, stocks_pc,
+                        historic_stocks_pc)
 
         return stocks
 
     def compute_future_demand(self, stock):
         prm = self.parameters
-        stk = self.get_new_stock(with_dsm=True, dim_letters=('t','r','g'))
+        gdp_dim_letters = prm['gdppc'].dims.letters
+        stk = self.get_new_stock(with_dsm=True, dim_letters=gdp_dim_letters + ('g',))
 
         stk.stock[...] = stock
         stk.set_lifetime(cfg.ldf_type, prm['lifetime_mean'], prm['lifetime_std'])

@@ -21,6 +21,7 @@ xlwt = "^1.3.0"
 plotly = "^5.18.0"
 sodym = { path = "../sodym/", develop = true }
 pydantic = "^2.8.2"
+kaleido = "0.2.1"
 
 
 [build-system]

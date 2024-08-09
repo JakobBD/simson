@@ -9,7 +9,7 @@ input_data_path: 'data/plastics/input'
 output_path: 'data/plastics/output'
 
 # model customization
-curve_strategy: 'GDP_regression'
+curve_strategy: 'Sigmoid_GDP_regression'
 ldf_type: 'Normal'
 product_dimension_name: 'Material'
 has_scenarios: False
